@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>销售判断自检清单</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#F4F7FB;color:#1F1F1F}
+.page{display:none;min-height:100vh;padding:0 16px 30px}
+.page.active{display:block;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.tb{height:6px;background:#184E79}
+.hero{text-align:center;padding:28px 0 16px}
+.hero h1{font-size:24px;color:#184E79;font-weight:800}
+.hero p{font-size:12px;color:#5B9BD5;margin-top:6px;font-style:italic}
+.tip{background:#184E79;color:#fff;font-size:11px;text-align:center;padding:10px;border-radius:8px;margin-bottom:12px;line-height:1.5}
+.ub{background:#E8F1F8;color:#184E79;font-size:13px;font-weight:700;text-align:center;padding:10px;border-radius:8px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
+.mc{background:#fff;border:1px solid #D8E2EC;border-radius:12px;padding:12px 10px;cursor:pointer;border-left:4px solid #ED7D31;position:relative;transition:transform .12s}
+.mc:active{transform:scale(.97)}
+.mc .nh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mc .n{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:#184E79;color:#fff;font-size:13px;font-weight:800;flex-shrink:0}
+.mc .t{font-size:12px;color:#184E79;font-weight:700;line-height:1.35}
+.mc .pk{font-size:10px;color:#5B6770;line-height:1.4}
+.mc .pk b{color:#184E79;font-weight:600}
+.mc .ar{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#D0D8E0;font-size:16px}
+.fn{text-align:center;font-size:10px;color:#8899A6;margin-top:16px}
+.bb{font-size:13px;color:#5B9BD5;font-weight:600;padding:14px 0 8px;cursor:pointer;border:none;background:none}
+.bb:active{opacity:.6}
+.dh{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.dh .n{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:#ED7D31;color:#fff;font-size:20px;font-weight:800;flex-shrink:0}
+.dh h2{font-size:19px;color:#184E79;font-weight:800;line-height:1.3}
+.ds{font-size:11px;color:#8899A6;margin:4px 0 16px;padding-left:50px}
+.sec{background:#fff;border:1px solid #D8E2EC;border-radius:12px;margin-bottom:14px;position:relative;padding:16px 14px 14px 20px;overflow:hidden}
+.sec .ac{position:absolute;left:0;top:0;width:5px;height:100%;border-radius:12px 0 0 12px}
+.sec.q .ac{background:#184E79}
+.sec.a .ac{background:#ED7D31}
+.sec h3{font-size:14px;font-weight:700;margin-bottom:10px}
+.sec.q h3{color:#184E79}
+.sec.a h3{color:#ED7D31}
+.sec ul{list-style:none}
+.sec li{font-size:13px;line-height:1.6;padding:4px 0 4px 10px;position:relative}
+.sec li::before{content:"";position:absolute;left:0;top:11px;width:4px;height:4px;border-radius:50%;background:#B0BEC5}
+.sec.a li::before{background:#ED7D31}
+.mt{background:#E8F1F8;border-radius:10px;padding:11px 14px;text-align:center;font-size:12px;color:#23795D;font-weight:700;line-height:1.45;margin-top:4px}
+.nd{display:flex;justify-content:center;gap:7px;margin-top:18px}
+.nd .d{width:26px;height:26px;border-radius:7px;background:#D8E2EC;color:#184E79;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:all .12s}
+.nd .d.on{background:#184E79;color:#fff}
+.nd .d:active{transform:scale(.88)}
+.sh{text-align:center;font-size:10px;color:#B0BEC5;margin-top:6px}
+</style>
+</head>
+<body>
+
+<div class="page active" id="p-ov">
+<div class="tb"></div>
+<div class="hero">
+<h1>销售判断自检清单</h1>
+<p>拜访前先确认：干什么 / 和谁谈 / 能推进到哪一步</p>
+</div>
+<div class="tip">先判断项目卡在哪一环，再看对应"自检问题"和"指导意见"，避免关键节点踩坑</div>
+<div class="ub">👇 点击卡片查看详情</div>
+<div class="grid" id="grid"></div>
+<div class="fn">投屏讲解可用总览页，手机查阅可点击单张卡片</div>
+</div>
+
+<div id="dets"></div>
+
+<script>
+var D=[
+{n:"0",t:"谁是决策者？如何影响？",q:["我是否清楚谁能影响最终判断？","谁负责把方案向老板/Leader汇报？","客户内部最终听谁的意见？"],a:["看谁向客户老板/Leader汇报，谁的意见会影响最终判断。","围绕成本、风险、回报讲价值。","帮窗口准备可直接向上汇报的材料。"],m:"先找到能向上汇报的人，再帮他把价值讲出去。"},
+{n:"1",t:"相信客户单一推脱，见不到决策者",q:["我是否只听一个窗口的说法？","我有没有在客户面前持续刷存在感？","有没有从不同职责摸清真实决策链？"],a:["先盘点：谁是决策者、影响者、汇报者。","通过采购/技术/质量/项目多方拼图。","争取和客户一起向上汇报，而不是被动等安排。"],m:"别只听一个窗口，要主动拼出决策链。"},
+{n:"2",t:"误把\"找茬\"当需求 / 一切照单执行",q:["客户提技术、质量、价格或流程要求时，","我是否先判断其合理性和背后动机，","而不是马上投入资源或直接让步？"],a:["技术/质量问题：带 FAE 一起确认。","价格问题：先了解市场价和客户底线。","反问\"新变化还是内部评审关注点？\"再决定投入程度。"],m:"先判断，再投入；先问清，再让步。"},
+{n:"3",t:"甘当\"千年老二\"",q:["我是否识别了陪标信号？","如果继续陪标，我是否清楚能换来什么价值？"],a:["识别：需求过细、约不到关键人、价格空间被锁死。","及时和 Leader 对齐：争第一、止损，还是有策略地换机会。","避免无目的消耗资源。"],m:"不是每个机会都值得拼到最后。"},
+{n:"4",t:"不会\"托人\"",q:["我是否只让客户帮我说好话？","还是已经让客户理解全盘价值，知道该怎么帮我说？"],a:["不只讲产品卖点，还要讲供应链/交付/质量/成本的整体方案。","让客户能用自己的业务语言向内部说明价值。","目标：让客户说出\"为什么选我们更稳、更省、更低风险\"。"],m:"不是让客户\"夸你\"，而是让客户\"会替你说\"。"},
+{n:"5",t:"在一棵树上吊死",q:["我是否只依赖一个联系人？","不同职责中，是否有可信任的人形成支持关系？"],a:["建立多角色\"内线\"或三角关系。","理想：采购愿意推、技术愿意用、质量/SQE不反对。","不要只在一个人身上押宝。"],m:"一个内线只能开门，多角色信任才能过会。"},
+{n:"6",t:"只满足需求，不塑造需求",q:["我是否等客户需求定完才进入？","有没有在项目初期就影响规格和方案方向？"],a:["项目早期引入 FAE、系统架构或产品团队。","提前参与需求定义。","通过技术建议/方案对比/应用案例，把优势嵌入客户标准，提升Market Share。"],m:"越早影响需求，越不容易沦为被动比价。"},
+{n:"7",t:"拿着产品当解决方案",q:["我是在讲参数和价格，","还是在讲客户真正能看到的价值？","谁能看见这个价值？"],a:["不把低价当价值。","不同角色拆解：采购看总成本；技术看性能匹配；质量看风险降低；项目看交付稳定。","用总成本、返修、停线、售后风险数据说明\"为什么贵得有理由\"。"],m:"让客户买的不是参数，是结果和价值。"}
+];
+
+var g=document.getElementById("grid"),dc=document.getElementById("dets"),ci=-1;
+
+D.forEach(function(c,i){
+  var e=document.createElement("div");
+  e.className="mc";
+  e.onclick=function(){go(i)};
+  e.innerHTML='<div class="nh"><span class="n">'+c.n+'</span><span class="t">'+c.t+'</span></div><div class="pk"><b>'+c.q[0]+'</b><br>'+c.a[0]+'</div><span class="ar">\u203a</span>';
+  g.appendChild(e);
+
+  var d=document.createElement("div");
+  d.className="page";
+  d.id="p-"+i;
+  var ql="",al="",dots="";
+  c.q.forEach(function(x){ql+="<li>"+x+"</li>"});
+  c.a.forEach(function(x){al+="<li>"+x+"</li>"});
+  D.forEach(function(_,j){dots+='<button class="d'+(j===i?" on":"")+'" onclick="go('+j+')">'+j+'</button>'});
+  d.innerHTML='<div class="tb"></div>'
+    +'<button class="bb" onclick="back()">\u2190 \u8fd4\u56de\u603b\u89c8</button>'
+    +'<div class="dh"><span class="n">'+c.n+'</span><h2>'+c.t+'</h2></div>'
+    +'<div class="ds">\u9879\u76ee\u5361\u5728\u8fd9\u91cc\u65f6\uff0c\u5148\u95ee\u81ea\u5df1\u8fd9\u51e0\u4e2a\u95ee\u9898</div>'
+    +'<div class="sec q"><div class="ac"></div><h3>\ud83d\udd0d \u6211\u6709\u6ca1\u6709\u5148\u60f3\u6e05\u695a\uff1f</h3><ul>'+ql+'</ul></div>'
+    +'<div class="sec a"><div class="ac"></div><h3>\u2705 \u6211\u5e94\u8be5\u600e\u4e48\u505a\uff1f</h3><ul>'+al+'</ul></div>'
+    +'<div class="mt">\ud83d\udca1 '+c.m+'</div>'
+    +'<div class="nd">'+dots+'</div>'
+    +'<div class="sh">\u70b9\u51fb\u6570\u5b57\u5feb\u901f\u8df3\u8f6c \uff5c \u5de6\u53f3\u6ed1\u52a8\u5207\u6362</div>';
+  dc.appendChild(d);
+});
+
+function go(i){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
+  document.getElementById("p-"+i).classList.add("active");
+  window.scrollTo(0,0);
+  ci=i;
+}
+function back(){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active")});
+  document.getElementById("p-ov").classList.add("active");
+  window.scrollTo(0,0);
+  ci=-1;
+}
+
+var sx=0;
+document.addEventListener("touchstart",function(e){sx=e.changedTouches[0].screenX});
+document.addEventListener("touchend",function(e){
+  if(ci<0)return;
+  var dx=e.changedTouches[0].screenX-sx;
+  if(Math.abs(dx)>55){
+    if(dx<0&&ci<D.length-1)go(ci+1);
+    else if(dx>0&&ci>0)go(ci-1);
+    else if(dx>0&&ci===0)back();
+  }
+});
+</script>
+</body>
+</html>
